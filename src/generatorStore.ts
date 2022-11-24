@@ -118,6 +118,29 @@ export default defineStore({
         }),
       );
     },
+    move: (index, moveBy) => {
+      set(
+        produce((state: GeneratorState) => {
+          const toIndex = index + moveBy;
+          state.stages.splice(toIndex, 0, state.stages.splice(index, 1)[0]);
+        }),
+      );
+    },
+    moveStep: (index, stepIndex, moveBy) => {
+      set(
+        produce((state: GeneratorState) => {
+          const toIndex = stepIndex + moveBy;
+          state.stages[index].steps.splice(
+            toIndex,
+            0,
+            state.stages[index].steps.splice(index, 1)[0],
+          );
+        }),
+      );
+    },
+    editStep: (index, stepIndex, ...attrs) => {
+      set('stages', index, 'steps', stepIndex, ...attrs);
+    },
     set: (...attrs) => {
       set(...attrs);
     },
