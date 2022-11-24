@@ -1,4 +1,4 @@
-import { Component, For } from 'solid-js';
+import { Component, For, Show } from 'solid-js';
 import {
   Box,
   Card,
@@ -58,12 +58,20 @@ const Generator: Component = () => {
               <IconButton color="error" onClick={() => actions.remove(index())}>
                 <DeleteIcon />
               </IconButton>
-              <IconButton onClick={() => {}}>
-                <ArrowUpwardIcon />
-              </IconButton>
-              <IconButton onClick={() => {}}>
-                <ArrowDownwardIcon />
-              </IconButton>
+              <Show when={store.stages.length > 1}>
+                <IconButton
+                  onClick={() => actions.move(index(), -1)}
+                  disabled={index() == 0}
+                >
+                  <ArrowUpwardIcon />
+                </IconButton>
+                <IconButton
+                  onClick={() => actions.move(index(), 1)}
+                  disabled={index() == store.stages.length - 1}
+                >
+                  <ArrowDownwardIcon />
+                </IconButton>
+              </Show>
             </Box>
             <Box sx={{ width: 1 }}>
               <CardContent sx={{}}>
@@ -115,12 +123,24 @@ const Generator: Component = () => {
                         >
                           <DeleteIcon />
                         </IconButton>
-                        <IconButton onClick={() => {}}>
-                          <ArrowUpwardIcon />
-                        </IconButton>
-                        <IconButton onClick={() => {}}>
-                          <ArrowDownwardIcon />
-                        </IconButton>
+                        <Show when={stage.steps.length > 1}>
+                          <IconButton
+                            onClick={() =>
+                              actions.moveStep(index(), stepIndex(), -1)
+                            }
+                            disabled={stepIndex() == 0}
+                          >
+                            <ArrowUpwardIcon />
+                          </IconButton>
+                          <IconButton
+                            onClick={() =>
+                              actions.moveStep(index(), stepIndex(), 1)
+                            }
+                            disabled={stepIndex() == stage.steps.length - 1}
+                          >
+                            <ArrowDownwardIcon />
+                          </IconButton>
+                        </Show>
                       </Box>
                       <Box sx={{ width: 1, padding: '10px' }}>
                         <TextField
@@ -129,10 +149,8 @@ const Generator: Component = () => {
                           fullWidth
                           value={step.name}
                           onChange={(event, value) => {
-                            actions.set(
-                              'stages',
+                            actions.editStep(
                               index(),
-                              'steps',
                               stepIndex(),
                               'name',
                               value,
@@ -144,10 +162,8 @@ const Generator: Component = () => {
                           onChange={(
                             event: ST.ChangeEvent<HTMLInputElement>,
                           ) => {
-                            actions.set(
-                              'stages',
+                            actions.editStep(
                               index(),
-                              'steps',
                               stepIndex(),
                               'type',
                               event.target.value,
@@ -168,10 +184,8 @@ const Generator: Component = () => {
                         <FormControlLabel
                           checked={step.loadStaticAssets}
                           onChange={(event, value) => {
-                            actions.set(
-                              'stages',
+                            actions.editStep(
                               index(),
-                              'steps',
                               stepIndex(),
                               'loadStaticAssets',
                               value,
@@ -192,10 +206,8 @@ const Generator: Component = () => {
                             onChange={(
                               event: ST.ChangeEvent<HTMLSelectElement>,
                             ) => {
-                              actions.set(
-                                'stages',
+                              actions.editStep(
                                 index(),
-                                'steps',
                                 stepIndex(),
                                 'method',
                                 event.target.value,
@@ -215,10 +227,8 @@ const Generator: Component = () => {
                             type="url"
                             value={step.url}
                             onChange={(event, value) => {
-                              actions.set(
-                                'stages',
+                              actions.editStep(
                                 index(),
-                                'steps',
                                 stepIndex(),
                                 'url',
                                 value,
