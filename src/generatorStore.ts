@@ -123,6 +123,7 @@ export default defineStore({
         produce((state: GeneratorState) => {
           const toIndex = index + moveBy;
           state.stages.splice(toIndex, 0, state.stages.splice(index, 1)[0]);
+          return state;
         }),
       );
     },
@@ -130,11 +131,10 @@ export default defineStore({
       set(
         produce((state: GeneratorState) => {
           const toIndex = stepIndex + moveBy;
-          state.stages[index].steps.splice(
-            toIndex,
-            0,
-            state.stages[index].steps.splice(index, 1)[0],
-          );
+          const steps = [...state.stages[index].steps];
+          steps.splice(toIndex, 0, steps.splice(stepIndex, 1)[0]);
+          state.stages[index].steps = steps;
+          return state;
         }),
       );
     },
