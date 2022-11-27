@@ -11,6 +11,7 @@ import {
   Switch,
   // NativeSelect,
   IconButton,
+  Checkbox,
 } from '@suid/material';
 import DeleteIcon from '@suid/icons-material/Delete';
 import ArrowUpwardIcon from '@suid/icons-material/ArrowUpward';
@@ -21,6 +22,7 @@ import generatorStore, {
   Stage,
   StepType,
   StepMethod,
+  StepHeader,
 } from './generatorStore';
 
 function toLetters(num: number): string {
@@ -194,6 +196,7 @@ const Generator: Component = () => {
                           control={() => <Switch />}
                           label="Load static assets (CSS, JS, IMG)"
                         />
+
                         <Box
                           sx={{
                             display: 'flex',
@@ -236,11 +239,78 @@ const Generator: Component = () => {
                             }}
                           />
                         </Box>
+
+                        <FormControlLabel
+                          label="Headers"
+                          control={() => null}
+                          sx={{ margin: 0, marginTop: '10px' }}
+                        />
+                        <For each={step.headers}>
+                          {(header: StepHeader, headerIndex) => (
+                            <Box
+                              sx={{
+                                display: 'flex',
+                                flexDirection: 'row',
+                                gap: '10px',
+                              }}
+                            >
+                              <Checkbox
+                                sx={{ flexShrink: 0 }}
+                                checked={header.enabled}
+                                onChange={(event, checked) => {
+                                  actions.editHeader(
+                                    index(),
+                                    stepIndex(),
+                                    headerIndex(),
+                                    'enabled',
+                                    checked,
+                                  );
+                                }}
+                              />
+                              <TextField
+                                sx={{ flex: 1 }}
+                                label="Header name"
+                                variant="standard"
+                                fullWidth
+                                value={header.name}
+                                onChange={(event, value) => {
+                                  actions.editHeader(
+                                    index(),
+                                    stepIndex(),
+                                    headerIndex(),
+                                    'name',
+                                    value,
+                                  );
+                                }}
+                              />
+                              <TextField
+                                sx={{ flex: 1.5 }}
+                                label="Value"
+                                variant="standard"
+                                fullWidth
+                                value={header.value}
+                                onChange={(event, value) => {
+                                  actions.editHeader(
+                                    index(),
+                                    stepIndex(),
+                                    headerIndex(),
+                                    'value',
+                                    value,
+                                  );
+                                }}
+                              />
+                            </Box>
+                          )}
+                        </For>
+                        <pre style={{ 'font-size': '11px' }}>
+                          {JSON.stringify(step, null, 2)}
+                        </pre>
                       </Box>
                     </Box>
                   )}
                 </For>
               </CardContent>
+
               <CardContent sx={{}}>
                 <Card sx={{ display: 'flex' }}>
                   <Button
@@ -259,6 +329,7 @@ const Generator: Component = () => {
           </Card>
         )}
       </For>
+
       <Card sx={{ display: 'flex' }}>
         <Button sx={{ width: 1 }} onClick={() => createStage()}>
           Create new Stage
