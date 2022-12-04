@@ -19,6 +19,7 @@ export type StepHeader = {
   name: string;
   value: string;
   enabled: boolean;
+  key: string;
 };
 export type StepQuery = {
   [key: string]: string;
@@ -59,6 +60,7 @@ const DefaultHeader: StepHeader = {
   name: '',
   value: '',
   enabled: false,
+  key: '' + Date.now(),
 };
 const DefaultStep: Step = {
   name: '',
@@ -173,12 +175,11 @@ export default defineStore({
               }
             } else {
               if (
-                headerIndex == headers.length - 2 &&
                 String(headers[headerIndex][key == 'name' ? 'value' : 'name'])
                   .length == 0
               ) {
                 // when you erase text, remove extra header
-                headers.splice(headers.length - 1, 1);
+                headers.splice(headerIndex, 1);
               }
             }
           }
